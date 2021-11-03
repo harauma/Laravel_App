@@ -22,3 +22,6 @@ Route::get('/hello', function () {
 });
 Route::get('signup', [SignupController::class, 'index'])->name('signup');
 Route::post('signup', [SignupController::class, 'store']);
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');
