@@ -14,12 +14,6 @@ use App\Http\Controllers\SignupController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/hello', function () {
-    return view('welcome');
-});
 Route::get('signup', [SignupController::class, 'index'])->name('signup');
 Route::post('signup', [SignupController::class, 'store']);
 Route::get('/{any}', function () {
