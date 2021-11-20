@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SignupController;
+use App\Http\Controllers\AccoutsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/accounts', [SignupController::class, 'list']);
-Route::get('/accounts/{id}', [SignupController::class, 'search']);
-Route::post('/accounts', [SignupController::class, 'create']);
-Route::put('/accounts/{id}', [SignupController::class, 'update']);
-Route::delete('/accounts/{id}', [SignupController::class, 'destroy']);
+Route::get('/accounts', [AccoutsController::class, 'list']);
+Route::get('/accounts/{id}', [AccoutsController::class, 'search']);
+Route::post('/accounts', [AccoutsController::class, 'create']);
+Route::put('/accounts/{id}', [AccoutsController::class, 'update']);
+Route::delete('/accounts/{id}', [AccoutsController::class, 'destroy']);

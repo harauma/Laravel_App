@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 /**
  * ユーザー情報に関する処理
  */
-class accoutsController extends Controller
+class AccoutsController extends Controller
 {
 
     /**
