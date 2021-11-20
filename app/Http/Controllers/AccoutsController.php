@@ -50,7 +50,6 @@ class AccoutsController extends Controller
         $account->login_id = $request->input('login_id');
         $account->password = $request->input('password');
         $account->name = $request->input('name');
-        $account->age = $request->input('age');
 
         $account->save();
 

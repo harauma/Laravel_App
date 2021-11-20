@@ -18,7 +18,6 @@ class CreateAccountsTable extends Migration
             $table->string('login_id', 32);
             $table->string('password');
             $table->string('name');
-            $table->integer('age');
             $table->timestamps();
         });
     }
