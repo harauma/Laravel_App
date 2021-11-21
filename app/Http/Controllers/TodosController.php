@@ -17,15 +17,13 @@ class TodosController extends Controller
      */
     public function list(Request $request)
     {
-        $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
         $accountId = $request->accountId;
-        $account = $accoutsController->search($accountId);
-
+        $account = Account::find($accountId);
         if (!$account) {
             return '';
         }
-        $todo = $account->todos();
 
+        $todo = $account->todos();
         if (!$todo) {
             return '';
         }
@@ -37,15 +35,13 @@ class TodosController extends Controller
      */
     public function search($id, Request $request)
     {
-        $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
         $accountId = $request->accountId;
-        $account = $accoutsController->search($accountId);
-
+        $account = Account::find($accountId);
         if (!$account) {
             return '';
         }
-        $todo = $account->todos()->where('id', $id);
 
+        $todo = $account->todos()->where('id', $id);
         if (!$todo) {
             return '';
         }
@@ -97,10 +93,10 @@ class TodosController extends Controller
     {
         $accountId = $request->input('accountId');
         $account = Account::find($accountId);
-
         if (!$account) {
             return '';
         }
+
         $todo = $account->todos()->where('id', $id)->first();
         $result = Todo::destroy($id);
 
