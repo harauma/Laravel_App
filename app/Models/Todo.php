@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Account extends Model
+class Todo extends Model
 {
     use HasFactory;
 
-    public function todos()
+    public function accont()
     {
         return $this
-            ->hasMany(Todo::class)
+            ->hasOne(Accout::class)
             ->get();
     }
 
-    // public function todos()
+    // public function accont()
     // {
     //     return $this
-    //         ->with('todos')
+    //         ->with('accounts')
     //         ->get();
     // }
 }

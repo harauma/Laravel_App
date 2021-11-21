@@ -30,7 +30,7 @@ class AccoutsController extends Controller
         if ($account) {
             return $account;
         }
-        return '存在しないです！！';
+        return '';
     }
 
     /**

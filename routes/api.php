@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccoutsController;
+use App\Http\Controllers\TodosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,9 @@ Route::get('/accounts/{id}', [AccoutsController::class, 'search']);
 Route::post('/accounts', [AccoutsController::class, 'create']);
 Route::put('/accounts/{id}', [AccoutsController::class, 'update']);
 Route::delete('/accounts/{id}', [AccoutsController::class, 'destroy']);
+
+Route::get('/todos', [TodosController::class, 'list']);
+Route::get('/todos/{id}', [TodosController::class, 'search']);
+Route::post('/todos', [TodosController::class, 'create']);
+Route::put('/todos/{id}', [TodosController::class, 'update']);
+Route::delete('/todos/{id}', [TodosController::class, 'destroy']);
