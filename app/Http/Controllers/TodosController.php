@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AccoutsController;
 use App\Models\Account;
 use App\Models\Todo;
 use Illuminate\Http\Request;
