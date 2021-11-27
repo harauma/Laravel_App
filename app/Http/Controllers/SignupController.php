@@ -35,6 +35,21 @@ class SignupController extends Controller
         // return view('signup', ['accounts' => Account::all()]);
         return redirect()->route('signup');
     }
+
+    /**
+     * ログイン処理
+     */
+    public function login(Request $request)
+    {
+        $loginId = $request->input('login_id');
+        $password = $request->input('password');
+
+        $account = Account::where('login_id', $loginId)->first();
+        if ($account->password == $password) {
+            return $account;
+        }
+        return null;
+    }
 }
 // curl -X POST -H "Content-Type: application/json" -d '{"login_id":"abcdef","pasword":"aaa","name":"hoge","age":12345}' http://homestead.test/api/accounts
 // curl -X POST -H "Content-Type: application/json" -d '{"login_id":"hoge01", "password":"12345", "name":"あいうえお", "age":21}' http://homestead.test/api/accounts

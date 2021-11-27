@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SignupController;
 use App\Http\Controllers\AccoutsController;
 use App\Http\Controllers\TodosController;
 use Illuminate\Http\Request;
@@ -31,3 +32,5 @@ Route::get('/todos/{id}', [TodosController::class, 'search']);
 Route::post('/todos', [TodosController::class, 'create']);
 Route::put('/todos/{id}', [TodosController::class, 'update']);
 Route::delete('/todos/{id}', [TodosController::class, 'destroy']);
+
+Route::post('/login', [SignupController::class, 'login']);
