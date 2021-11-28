@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * ユーザー情報に関する処理
@@ -16,8 +17,16 @@ class AccoutsController extends Controller
      */
     public function list()
     {
-        $accounts = Account::all();
-        return $accounts;
+        try {
+            $accounts = Account::all();
+            if ($accounts->isNotEmpty()) {
+                return response()->json($accounts, Response::HTTP_OK);
+            } else {
+                return response()->json([], Response::HTTP_NO_CONTENT);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**
