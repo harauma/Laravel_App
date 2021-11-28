@@ -36,16 +36,17 @@ class TodosController extends Controller
     public function search($id, Request $request)
     {
         $accountId = $request->accountId;
-        $account = Account::find($accountId);
-        if (!$account) {
-            return '';
+        try {
+            $account = Account::find($accountId);
+            $todo = $account->todos()->where('id', $id);
+            if ($todo->isNotEmpty()) {
+                return response()->json($todo, 200);
+            } else {
+                return response()->json([], 404);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([], 404);
         }
-
-        $todo = $account->todos()->where('id', $id);
-        if (!$todo) {
-            return '';
-        }
-        return $todo;
     }
 
     /**
