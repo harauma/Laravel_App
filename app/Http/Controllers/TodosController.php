@@ -95,7 +95,7 @@ class TodosController extends Controller
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
-            $result = Todo::destroy($id);
+            $result = $todo->delete();
             return response()->json($result, Response::HTTP_NO_CONTENT);
         } catch (\Throwable $e) {
             return response()->json([], Response::HTTP_BAD_REQUEST);
