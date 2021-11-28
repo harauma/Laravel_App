@@ -17,16 +17,17 @@ class TodosController extends Controller
     public function list(Request $request)
     {
         $accountId = $request->accountId;
-        $account = Account::find($accountId);
-        if (!$account) {
-            return '';
+        try {
+            $account = Account::find($accountId);
+            $todo = $account->todos();
+            if ($todo->isNotEmpty()) {
+                return response()->json($todo, 200);
+            } else {
+                return response()->json([], 204);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([], 404);
         }
-
-        $todo = $account->todos();
-        if (!$todo) {
-            return '';
-        }
-        return $todo;
     }
 
     /**
