@@ -75,12 +75,16 @@ class AccoutsController extends Controller
      */
     public function update($id, Request $request)
     {
-        $account = Account::find($id);
-
-        $account->name = 'updated name';
-        $account->save();
-
-        return $account;
+        try {
+            $account = Account::find($id);
+            $account->login_id = $request->input('login_id');
+            $account->password = $request->input('password');
+            $account->name = $request->input('name');
+            $account->save();
+            return response()->json($account, Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
