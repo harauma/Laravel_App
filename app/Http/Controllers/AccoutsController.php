@@ -34,12 +34,16 @@ class AccoutsController extends Controller
      */
     public function search($id)
     {
-        $account = Account::find($id);
-
-        if ($account) {
-            return $account;
+        try {
+            $account = Account::find($id);
+            if ($account->isNotEmpty()) {
+                return response()->json($account, Response::HTTP_OK);
+            } else {
+                return response()->json([], Response::HTTP_NOT_FOUND);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_NOT_FOUND);
         }
-        return '';
     }
 
     /**
