@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Todoに関する処理
@@ -21,12 +22,12 @@ class TodosController extends Controller
             $account = Account::find($accountId);
             $todo = $account->todos();
             if ($todo->isNotEmpty()) {
-                return response()->json($todo, 200);
+                return response()->json($todo, Response::HTTP_OK);
             } else {
-                return response()->json([], 204);
+                return response()->json([], Response::HTTP_NO_CONTENT);
             }
         } catch (\Throwable $e) {
-            return response()->json([], 404);
+            return response()->json([], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -40,12 +41,12 @@ class TodosController extends Controller
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id);
             if ($todo->isNotEmpty()) {
-                return response()->json($todo, 200);
+                return response()->json($todo, Response::HTTP_OK);
             } else {
-                return response()->json([], 404);
+                return response()->json([], Response::HTTP_NOT_FOUND);
             }
         } catch (\Throwable $e) {
-            return response()->json([], 404);
+            return response()->json([], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -58,15 +59,14 @@ class TodosController extends Controller
         $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
         $accountId = $request->input('accountId');
         $result = $accoutsController->search($accountId);
-        if ($result == '') {
-            return $todo;
+        try {
+            $todo->account_id = $accountId;
+            $todo->todo = $request->input('todo');
+            $todo->save();
+            return response()->json($todo, Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
+            return response()->json($todo, Response::HTTP_BAD_REQUEST);
         }
-
-        $todo->account_id = $accountId;
-        $todo->todo = $request->input('todo');
-        $todo->save();
-
-        return $todo;
     }
 
     /**
