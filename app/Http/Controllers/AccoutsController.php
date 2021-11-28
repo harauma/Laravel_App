@@ -93,11 +93,11 @@ class AccoutsController extends Controller
     public function destroy($id)
     {
         // $result = Account::where('id', $id)->delete();
-        $result = Account::destroy($id);
-
-        if ($result > 0) {
-            return 'success!!';
+        try {
+            $result = Account::destroy($id);
+            return response()->json($result, Response::HTTP_NO_CONTENT);
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_BAD_REQUEST);
         }
-        return 'not found!!';
     }
 }
