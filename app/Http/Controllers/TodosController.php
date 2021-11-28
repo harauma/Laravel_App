@@ -75,16 +75,15 @@ class TodosController extends Controller
     public function update($id, Request $request)
     {
         $accountId = $request->input('accountId');
+        try {
         $account = Account::find($accountId);
-        if (!$account) {
-            return '';
-        }
-
         $todo = $account->todos()->where('id', $id)->first();
         $todo->todo = $request->input('todo');
         $todo->save();
-
-        return $todo;
+            return response()->json($todo, Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
