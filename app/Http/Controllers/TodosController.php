@@ -76,10 +76,10 @@ class TodosController extends Controller
     {
         $accountId = $request->input('accountId');
         try {
-        $account = Account::find($accountId);
-        $todo = $account->todos()->where('id', $id)->first();
-        $todo->todo = $request->input('todo');
-        $todo->save();
+            $account = Account::find($accountId);
+            $todo = $account->todos()->where('id', $id)->first();
+            $todo->todo = $request->input('todo');
+            $todo->save();
             return response()->json($todo, Response::HTTP_OK);
         } catch (\Throwable $e) {
             return response()->json([], Response::HTTP_BAD_REQUEST);
@@ -92,17 +92,13 @@ class TodosController extends Controller
     public function destroy($id, Request $request)
     {
         $accountId = $request->input('accountId');
-        $account = Account::find($accountId);
-        if (!$account) {
-            return '';
+        try {
+            $account = Account::find($accountId);
+            $todo = $account->todos()->where('id', $id)->first();
+            $result = Todo::destroy($id);
+            return response()->json($result, Response::HTTP_NO_CONTENT);
+        } catch (\Throwable $e) {
+            return response()->json([], Response::HTTP_BAD_REQUEST);
         }
-
-        $todo = $account->todos()->where('id', $id)->first();
-        $result = Todo::destroy($id);
-
-        if ($result > 0) {
-            return 'success!!';
-        }
-        return 'not found!!';
     }
 }
