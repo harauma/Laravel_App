@@ -57,17 +57,17 @@ class AccoutsController extends Controller
         // 	'name' => 'required',
         // 	'age' => 'required|numeric',
         // ]);
-
-        $account = new Account();
-
-        $account->login_id = $request->input('login_id');
-        $account->password = $request->input('password');
-        $account->name = $request->input('name');
-
-        $account->save();
-
         // return view('signup', ['accounts' => Account::all()]);
-        return $account;
+        try {
+            $account = new Account();
+            $account->login_id = $request->input('login_id');
+            $account->password = $request->input('password');
+            $account->name = $request->input('name');
+            $account->save();
+            return response()->json($account, Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
+            return response()->json($account, Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
