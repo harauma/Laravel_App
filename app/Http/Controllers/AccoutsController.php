@@ -36,7 +36,7 @@ class AccoutsController extends Controller
     {
         try {
             $account = Account::find($id);
-            if ($account->isNotEmpty()) {
+            if ($account) {
                 return response()->json($account, Response::HTTP_OK);
             } else {
                 return response()->json([], Response::HTTP_NOT_FOUND);
