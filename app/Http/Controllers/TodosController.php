@@ -19,8 +19,13 @@ class TodosController extends Controller
     {
         $accountId = $request->accountId;
         try {
-            $account = Account::find($accountId);
-            $todo = $account->todos();
+            // 以下だと結合されたデータを取得できない
+            // $account = Account::find($accountId);
+            // $todo = $account->todos();
+            $todo = Todo::select('todos.*', 'accounts.name as account_name')
+                ->join('accounts', 'id', '=', 'todos', 'accout_id')
+                ->where('account_id', $accountId)
+                ->get(["accounts.id as account_id", "todos.id as todo_id"]);
             if ($todo->isNotEmpty()) {
                 return response()->json($todo, Response::HTTP_OK);
             } else {
