@@ -30,7 +30,7 @@ export const Login: VFC = memo(() => {
     <Flex align="center" justify="center" height="80vh">
       <Box bg="white" w="lg" p={4} borderRadius="md" shadow="md">
         <Heading as="h1" size="lg" textAlign="center">
-          Todoシェアアプリ
+          Todoシェアリング
         </Heading>
         <Divider my={4} />
         <Stack spacing={6} py={4} px={10}>
@@ -43,13 +43,13 @@ export const Login: VFC = memo(() => {
             <Input
               pr="4.5rem"
               type={show ? "text" : "password"}
-              placeholder="Enter password"
+              placeholder="パスワード"
               value={password}
               onChange={onChangePassword}
             />
             <InputRightElement width="4.5rem">
               <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
+                {show ? "非表示" : "表示"}
               </Button>
             </InputRightElement>
           </InputGroup>

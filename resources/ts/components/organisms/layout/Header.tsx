@@ -10,12 +10,13 @@ export const Header: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
 
-  const onClickHome = useCallback(() => history.push("/home"), []);
+  const onClickTodoList = useCallback(() => history.push("/home"), []);
   const onClickUserManagement = useCallback(
     () => history.push("/home/user_management"),
     []
   );
   const onClickSetting = useCallback(() => history.push("/home/setting"), []);
+  const onClickLogout = useCallback(() => history.push("/login"), []);
 
   return (
     <>
@@ -32,10 +33,10 @@ export const Header: VFC = memo(() => {
           as="a"
           mr={8}
           _hover={{ cursor: "pointer" }}
-          onClick={onClickHome}
+          onClick={onClickTodoList}
         >
           <Heading as="h1" fontSize={{ base: "md", md: "lg" }}>
-            ユーザー管理アプリ
+            Todoシェアリング
           </Heading>
         </Flex>
         <Flex
@@ -45,18 +46,35 @@ export const Header: VFC = memo(() => {
           display={{ base: "none", md: "flex" }}
         >
           <Box pr={4}>
+            <Link onClick={onClickTodoList}>Todo一覧</Link>
+          </Box>
+          <Box pr={4}>
             <Link onClick={onClickUserManagement}>ユーザー一覧</Link>
           </Box>
-          <Link onClick={onClickSetting}>設定</Link>
+          <Box pr={4}>
+            <Link onClick={onClickSetting}>設定</Link>
+          </Box>
+        </Flex>
+        <Flex
+          align="right"
+          fontSize="sm"
+          flexGrow={2}
+          justify="right"
+          display={{ base: "none", md: "flex" }}
+        >
+          <Box pr={4}>
+            <Link onClick={onClickLogout}>ログアウト</Link>
+          </Box>
         </Flex>
         <MenuIconButton onOpen={onOpen} />
       </Flex>
       <MenuDrawer
         onClose={onClose}
         isOpen={isOpen}
-        onClickHome={onClickHome}
+        onClickTodoList={onClickTodoList}
         onClickUserManagement={onClickUserManagement}
         onClickSetting={onClickSetting}
+        onClickLogout={onClickLogout}
       />
     </>
   );
