@@ -23,9 +23,9 @@ class TodosController extends Controller
             // $account = Account::find($accountId);
             // $todo = $account->todos();
             $todo = Todo::select('todos.*', 'accounts.name as account_name')
-                ->join('accounts', 'id', '=', 'todos', 'accout_id')
+                ->join('accounts', 'accounts.id', '=', 'todos.account_id')
                 ->where('account_id', $accountId)
-                ->get(["accounts.id as account_id", "todos.id as todo_id"]);
+                ->get();
             if ($todo->isNotEmpty()) {
                 return response()->json($todo, Response::HTTP_OK);
             } else {
@@ -64,9 +64,14 @@ class TodosController extends Controller
         $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
         $accountId = $request->input('accountId');
         $result = $accoutsController->search($accountId);
+        if ($result->status() !== Response::HTTP_OK) {
+            return $result;
+        };
         try {
             $todo->account_id = $accountId;
             $todo->todo = $request->input('todo');
+            $todo->detail = $request->input('detail');
+            $todo->completed = false;
             $todo->save();
             return response()->json($todo, Response::HTTP_CREATED);
         } catch (\Throwable $e) {

@@ -16,6 +16,10 @@ class Todo extends Model
             ->get();
     }
 
+    protected $casts = [
+        'completed' => 'boolean',
+    ];
+
     // public function accont()
     // {
     //     return $this

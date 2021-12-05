@@ -17,6 +17,8 @@ class CreateTodosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('account_id');
             $table->string('todo');
+            $table->string('detail')->nullable();
+            $table->boolean('completed')->default(false);
             $table->timestamps();
             $table->foreign('account_id')->references('id')->on('accounts');
         });
