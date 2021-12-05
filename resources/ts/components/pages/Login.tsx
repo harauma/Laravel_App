@@ -1,21 +1,34 @@
 import React from "react";
 import { ChangeEvent, memo, useState, VFC } from "react";
-import { Box, Divider, Flex, Heading, Input, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+} from "@chakra-ui/react";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useAuth } from "../../hooks/useAuth";
 
 export const Login: VFC = memo(() => {
   const { login, loading } = useAuth();
-
   const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = React.useState(false);
 
+  const handleClick = () => setShow(!show);
   const onClickLogin = () => login(userId);
-
   const onChangeUserId = (e: ChangeEvent<HTMLInputElement>) =>
     setUserId(e.target.value);
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
   return (
-    <Flex align="center" justify="center" height="100vh">
-      <Box bg="white" w="sm" p={4} borderRadius="md" shadow="md">
+    <Flex align="center" justify="center" height="80vh">
+      <Box bg="white" w="lg" p={4} borderRadius="md" shadow="md">
         <Heading as="h1" size="lg" textAlign="center">
           Todoシェアアプリ
         </Heading>
@@ -26,6 +39,20 @@ export const Login: VFC = memo(() => {
             value={userId}
             onChange={onChangeUserId}
           />
+          <InputGroup size="md">
+            <Input
+              pr="4.5rem"
+              type={show ? "text" : "password"}
+              placeholder="Enter password"
+              value={password}
+              onChange={onChangePassword}
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
           <PrimaryButton
             disabled={userId === ""}
             loading={loading}
