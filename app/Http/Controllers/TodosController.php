@@ -60,18 +60,14 @@ class TodosController extends Controller
      */
     public function create(Request $request)
     {
-        $todo = new Todo();
+        $todo = new Todo($request->input('todo'));
         $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
-        $accountId = $request->input('accountId');
-        $result = $accoutsController->search($accountId);
+        $account_id = $todo['account_id'];
+        $result = $accoutsController->search($account_id);
         if ($result->status() !== Response::HTTP_OK) {
             return $result;
         };
         try {
-            $todo->account_id = $accountId;
-            $todo->todo = $request->input('todo');
-            $todo->detail = $request->input('detail');
-            $todo->completed = false;
             $todo->save();
             return response()->json($todo, Response::HTTP_CREATED);
         } catch (\Throwable $e) {

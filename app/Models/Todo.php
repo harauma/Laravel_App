@@ -20,6 +20,8 @@ class Todo extends Model
         'completed' => 'boolean',
     ];
 
+    protected $fillable = ['todo', 'detail', 'completed', 'account_id'];
+
     // public function accont()
     // {
     //     return $this
