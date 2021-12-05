@@ -1,30 +1,57 @@
 import React from "react";
-import { memo, useEffect, VFC } from "react";
+import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
 import {
   Center,
+  Heading,
+  Input,
   Spinner,
+  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   Textarea,
   Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
 
 import { useAllTodos } from "../../hooks/useAllTodos";
 import { Todo } from "../../types/api/todo";
-import { UserCard } from "../organisms/user/UserCard";
 import { TodoCard } from "../organisms/todo/TodoCard";
+import { PrimaryButton } from "../atoms/button/PrimaryButton";
+import { useCreateTodo } from "../../hooks/useCreateTodo";
 
 export const Home: VFC = memo(() => {
-  const { getTodos, todos, loading } = useAllTodos();
-  useEffect(() => getTodos(), []);
+  const { getTodos, todos, loading: getLoading } = useAllTodos();
+  const { createTodo, loading: createLoading } = useCreateTodo();
+  const [newTodo, setNewTodo] = useState("");
+  const [todoDetail, setTodoDetail] = useState("");
+
+  const onChangeNewTodo = (e: ChangeEvent<HTMLInputElement>) =>
+    setNewTodo(e.target.value);
+  const onChangeTodoDetail = (e: ChangeEvent<HTMLTextAreaElement>) =>
+    setTodoDetail(e.target.value);
+  const onClickGetTodo = () => {
+    getTodos(true);
+  };
+  const onClickSubmit = async () => {
+    const todo: Todo = {
+      account_id: 1,
+      todo: newTodo,
+      detail: todoDetail,
+      completed: false,
+    };
+    await createTodo(todo);
+    setNewTodo("");
+    setTodoDetail("");
+    getTodos(false);
+  };
+  useEffect(() => getTodos(true), []);
 
   return (
     <>
-      {loading ? (
+      {getLoading ? (
         <Center h="100vh">
           <Spinner />
         </Center>
@@ -37,51 +64,112 @@ export const Home: VFC = memo(() => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Textarea placeholder="Here is a sample placeholder" />
-              <Wrap p={{ base: 3, md: 10 }}>
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo} />
-                ))}
-              </Wrap>
+              <Stack spacing={3}>
+                <Input
+                  placeholder="Todoを入力"
+                  value={newTodo}
+                  onChange={onChangeNewTodo}
+                />
+                <Textarea
+                  placeholder="Todoの詳細を入力"
+                  value={todoDetail}
+                  onChange={onChangeTodoDetail}
+                />
+                <PrimaryButton
+                  disabled={newTodo === ""}
+                  loading={createLoading}
+                  onClick={onClickSubmit}
+                >
+                  登録
+                </PrimaryButton>
+                <PrimaryButton onClick={onClickGetTodo}>todo取得</PrimaryButton>
+                <Heading as="h2" size="md">
+                  Todo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+                <Heading as="h2" size="md">
+                  完了したTodo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+              </Stack>
             </TabPanel>
             <TabPanel>
-              <Textarea placeholder="Here is a sample placeholder" />
-              <Wrap p={{ base: 4, md: 10 }}>
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-              </Wrap>
+              <Stack spacing={3}>
+                <Input placeholder="Todoを入力" />
+                <Textarea placeholder="Todoの詳細を入力" />
+                <Heading as="h2" size="md">
+                  Todo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+                <Heading as="h2" size="md">
+                  完了したTodo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+              </Stack>
             </TabPanel>
             <TabPanel>
-              <Textarea placeholder="Here is a sample placeholder" />
-              <Wrap p={{ base: 4, md: 10 }}>
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 3} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-                {todos?.map((todo: Todo) => (
-                  <TodoCard id={todo.id} todo={todo.todo + 2} />
-                ))}
-              </Wrap>
+              <Stack spacing={3}>
+                <Input placeholder="Todoを入力" />
+                <Textarea placeholder="Todoの詳細を入力" />
+                <Heading as="h2" size="md">
+                  Todo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+                <Heading as="h2" size="md">
+                  完了したTodo一覧
+                </Heading>
+                <Wrap>
+                  {todos ? (
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
+                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                  ) : (
+                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                  )}
+                </Wrap>
+              </Stack>
             </TabPanel>
           </TabPanels>
         </Tabs>
       )}
-      <p>ホームページです</p>
     </>
   );
 });
