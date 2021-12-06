@@ -1,5 +1,5 @@
 import React from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { memo, VFC } from "react";
 import { Box, Checkbox, Stack, Text } from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
@@ -12,12 +12,17 @@ type Props = {
 
 export const TodoCard: VFC<Props> = memo((props) => {
   const { id, todo, onClick } = props;
+  const [completed, setCompleted] = useState(false);
 
   const onChangeCompleted = useCallback((e) => {
     console.log(e.target.checked);
-    todo.completed = e.target.checked;
+    setCompleted(e.target.checked);
     // todo更新API
   }, []);
+
+  useEffect(() => {
+    setCompleted(todo?.completed ?? false);
+  }, [todo]);
 
   return (
     <Box
@@ -42,7 +47,7 @@ export const TodoCard: VFC<Props> = memo((props) => {
           size="md"
           colorScheme="green"
           value={todo.id}
-          isChecked={todo.completed}
+          isChecked={completed}
           onChange={onChangeCompleted}
         >
           <Text fontSize="md">完了しました？</Text>

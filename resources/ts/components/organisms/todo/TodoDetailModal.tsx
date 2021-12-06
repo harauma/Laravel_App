@@ -46,7 +46,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
   const onChangeTodoDetail = (e: ChangeEvent<HTMLInputElement>) =>
     setTodoDetail(e.target.value);
 
-  const onChangeCompleted = (e: any) => setCompleted(e.target.value);
+  const onChangeCompleted = (e: any) => setCompleted(e.target.checked);
 
   const onClickUpdate = () => alert("//Todo 更新API呼び出す！");
 
@@ -75,7 +75,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
             </FormControl>
             <FormControl>
               <FormLabel>登録者</FormLabel>
-              <Input value={todoInfo?.account_name} isReadOnly={true} />
+              <Input value={todoInfo?.account_name} isDisabled={true} />
             </FormControl>
             <FormControl>
               <Checkbox
