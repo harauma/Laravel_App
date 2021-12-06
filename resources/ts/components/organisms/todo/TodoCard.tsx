@@ -5,11 +5,13 @@ import { Box, Checkbox, Stack, Text } from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
 
 type Props = {
+  id: number;
   todo: Todo;
+  onClick: (id: number) => void;
 };
 
 export const TodoCard: VFC<Props> = memo((props) => {
-  const { todo } = props;
+  const { id, todo, onClick } = props;
 
   const onChangeCompleted = useCallback((e) => {
     console.log(e.target.checked);
@@ -25,9 +27,10 @@ export const TodoCard: VFC<Props> = memo((props) => {
       borderRadius="10px"
       shadow="md"
       p={4}
+      onClick={() => onClick(id)}
       _hover={{ cursor: "pointer", opacity: 0.8 }}
     >
-      <Stack justify="center">
+      <Stack justify="space-between">
         <Text fontSize="lg" fontWeight="bold">
           {todo.todo}
         </Text>

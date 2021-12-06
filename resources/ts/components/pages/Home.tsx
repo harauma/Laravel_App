@@ -1,5 +1,12 @@
 import React from "react";
-import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
+import {
+  ChangeEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  VFC,
+} from "react";
 import {
   Center,
   Heading,
@@ -13,6 +20,7 @@ import {
   Tabs,
   Text,
   Textarea,
+  useDisclosure,
   Wrap,
 } from "@chakra-ui/react";
 
@@ -21,12 +29,18 @@ import { Todo } from "../../types/api/todo";
 import { TodoCard } from "../organisms/todo/TodoCard";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useCreateTodo } from "../../hooks/useCreateTodo";
+import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
+import { useSelectTodo } from "../../hooks/useSelectTodo";
 
 export const Home: VFC = memo(() => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { getTodos, todos, loading: getLoading } = useAllTodos();
   const { createTodo, loading: createLoading } = useCreateTodo();
+  const { onSelectTodo, selectedTodo } = useSelectTodo();
   const [newTodo, setNewTodo] = useState("");
   const [todoDetail, setTodoDetail] = useState("");
+
+  useEffect(() => getTodos(true), []);
 
   const onChangeNewTodo = (e: ChangeEvent<HTMLInputElement>) =>
     setNewTodo(e.target.value);
@@ -35,6 +49,7 @@ export const Home: VFC = memo(() => {
   const onClickGetTodo = () => {
     getTodos(true);
   };
+
   const onClickSubmit = async () => {
     const todo: Todo = {
       account_id: 1,
@@ -47,7 +62,13 @@ export const Home: VFC = memo(() => {
     setTodoDetail("");
     getTodos(false);
   };
-  useEffect(() => getTodos(true), []);
+
+  const onClickTodo = useCallback(
+    (id: number) => {
+      onSelectTodo({ id, todos, onOpen });
+    },
+    [todos, onSelectTodo, onOpen]
+  );
 
   return (
     <>
@@ -88,7 +109,13 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -98,7 +125,13 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -114,8 +147,20 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    )),
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -125,8 +170,20 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    )),
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -142,11 +199,20 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    )),
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -156,11 +222,20 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />),
-                    todos?.map((todo: Todo) => <TodoCard todo={todo} />)
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    )),
+                    todos?.map((todo: Todo) => (
+                      <TodoCard
+                        id={todo.id!}
+                        todo={todo}
+                        onClick={onClickTodo}
+                      />
+                    ))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -170,6 +245,11 @@ export const Home: VFC = memo(() => {
           </TabPanels>
         </Tabs>
       )}
+      <TodoDetailModal
+        todoInfo={selectedTodo}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 });
