@@ -14,7 +14,7 @@ export const useAllTodos = () => {
     setLoading(loading);
     async function getTodos() {
       await axios
-        .get<Array<Todo>>("http://homestead.test/api/todos?accountId=1")
+        .get<Array<Todo>>("http://homestead.test/api/todos?account_id=1")
         .then((res) => {
           setTodos(res.data ?? []);
         })

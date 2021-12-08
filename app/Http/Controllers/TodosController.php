@@ -17,7 +17,7 @@ class TodosController extends Controller
      */
     public function list(Request $request)
     {
-        $accountId = $request->accountId;
+        $accountId = $request->account_id;
         try {
             // 以下だと結合されたデータを取得できない
             // $account = Account::find($accountId);
@@ -41,7 +41,7 @@ class TodosController extends Controller
      */
     public function search($id, Request $request)
     {
-        $accountId = $request->accountId;
+        $accountId = $request->account_id;
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id);
@@ -80,7 +80,7 @@ class TodosController extends Controller
      */
     public function update($id, Request $request)
     {
-        $accountId = $request->input('accountId');
+        $accountId = $request->input('account_id');
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
@@ -97,7 +97,7 @@ class TodosController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $accountId = $request->input('accountId');
+        $accountId = $request->input('account_id');
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
