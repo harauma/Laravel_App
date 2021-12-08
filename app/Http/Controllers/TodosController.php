@@ -62,8 +62,8 @@ class TodosController extends Controller
     {
         $todo = new Todo($request->input('todo'));
         $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
-        $account_id = $todo['account_id'];
-        $result = $accoutsController->search($account_id);
+        $accountId = $todo['account_id'];
+        $result = $accoutsController->search($accountId);
         if ($result->status() !== Response::HTTP_OK) {
             return $result;
         };
@@ -80,15 +80,18 @@ class TodosController extends Controller
      */
     public function update($id, Request $request)
     {
-        $accountId = $request->input('account_id');
+        $request_todo = new Todo($request->input('todo'));
+        $accountId = $request_todo['account_id'];
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
-            $todo->todo = $request->input('todo');
+            $todo->todo = $request_todo->todo;
+            $todo->detail = $request_todo->detail;
+            $todo->completed = $request_todo->completed;
             $todo->save();
             return response()->json($todo, Response::HTTP_OK);
         } catch (\Throwable $e) {
-            return response()->json([], Response::HTTP_BAD_REQUEST);
+            return response()->json($e, Response::HTTP_BAD_REQUEST);
         }
     }
 

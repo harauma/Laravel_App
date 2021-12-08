@@ -14,12 +14,14 @@ import {
   Stack,
   Text,
   Button,
+  Textarea,
 } from "@chakra-ui/react";
 
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { Checkbox } from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
 import { useDeleteTodo } from "../../../hooks/useDeleteTodo";
+import { useUpdateTodo } from "../../../hooks/useUpdateTodo";
 
 type Props = {
   todoInfo: Todo | null;
@@ -30,6 +32,7 @@ type Props = {
 
 export const TodoDetailModal: VFC<Props> = memo((props) => {
   const { todoInfo, isOpen, onClose } = props;
+  const { updateTodo, loading: updateLoading } = useUpdateTodo();
   const { deleteTodo, loading: deleteLoading } = useDeleteTodo();
   const [todo, setTodo] = useState<Todo>({});
 
@@ -41,14 +44,17 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
     setTodo({ ...todo, todo: e.target.value });
   };
 
-  const onChangeTodoDetail = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeTodoDetail = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setTodo({ ...todo, detail: e.target.value });
   };
 
   const onChangeCompleted = (e: any) => {
-    setTodo({ ...todo, completed: e.target.value });
+    setTodo({ ...todo, completed: e.target.checked });
   };
-  const onClickUpdate = () => alert("//Todo 更新API呼び出す！");
+  const onClickUpdate = async () => {
+    await updateTodo(todo);
+    onClose();
+  };
 
   const onClickDelete = async () => {
     await deleteTodo(todo);
@@ -74,7 +80,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
             </FormControl>
             <FormControl>
               <FormLabel>Todo詳細</FormLabel>
-              <Input value={todo.detail} onChange={onChangeTodoDetail} />
+              <Textarea value={todo.detail} onChange={onChangeTodoDetail} />
             </FormControl>
             <FormControl>
               <FormLabel>登録者</FormLabel>
@@ -94,7 +100,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <PrimaryButton onClick={onClickUpdate} mr="3">
+          <PrimaryButton mr="3" loading={updateLoading} onClick={onClickUpdate}>
             更新
           </PrimaryButton>
           <Button
