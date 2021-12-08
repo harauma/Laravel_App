@@ -70,6 +70,11 @@ export const Home: VFC = memo(() => {
     [todos, onSelectTodo, onOpen]
   );
 
+  const onCloseModal = () => {
+    getTodos(false);
+    onClose();
+  };
+
   return (
     <>
       {getLoading ? (
@@ -147,7 +152,7 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => (
+                    (todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
                         todo={todo}
@@ -160,7 +165,7 @@ export const Home: VFC = memo(() => {
                         todo={todo}
                         onClick={onClickTodo}
                       />
-                    ))
+                    )))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -170,7 +175,7 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => (
+                    (todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
                         todo={todo}
@@ -183,7 +188,7 @@ export const Home: VFC = memo(() => {
                         todo={todo}
                         onClick={onClickTodo}
                       />
-                    ))
+                    )))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -199,7 +204,7 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => (
+                    (todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
                         todo={todo}
@@ -212,7 +217,7 @@ export const Home: VFC = memo(() => {
                         todo={todo}
                         onClick={onClickTodo}
                       />
-                    ))
+                    )))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -222,7 +227,7 @@ export const Home: VFC = memo(() => {
                 </Heading>
                 <Wrap>
                   {todos ? (
-                    todos?.map((todo: Todo) => (
+                    (todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
                         todo={todo}
@@ -235,7 +240,7 @@ export const Home: VFC = memo(() => {
                         todo={todo}
                         onClick={onClickTodo}
                       />
-                    ))
+                    )))
                   ) : (
                     <Text fontSize="md">まだTodoが登録されていません</Text>
                   )}
@@ -248,7 +253,7 @@ export const Home: VFC = memo(() => {
       <TodoDetailModal
         todoInfo={selectedTodo}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onCloseModal}
       />
     </>
   );
