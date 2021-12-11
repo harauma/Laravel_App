@@ -31,8 +31,10 @@ import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useCreateTodo } from "../../hooks/useCreateTodo";
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { useSelectTodo } from "../../hooks/useSelectTodo";
+import { useLoginAccount } from "../../hooks/useLoginAccount";
 
 export const Home: VFC = memo(() => {
+  const { loginAccount } = useLoginAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { getTodos, todos, loading: getLoading } = useAllTodos();
   const { createTodo, loading: createLoading } = useCreateTodo();
@@ -40,19 +42,19 @@ export const Home: VFC = memo(() => {
   const [newTodo, setNewTodo] = useState("");
   const [todoDetail, setTodoDetail] = useState("");
 
-  useEffect(() => getTodos(true), []);
+  useEffect(() => getTodos(true, loginAccount?.id!), []);
 
   const onChangeNewTodo = (e: ChangeEvent<HTMLInputElement>) =>
     setNewTodo(e.target.value);
   const onChangeTodoDetail = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setTodoDetail(e.target.value);
   const onClickGetTodo = () => {
-    getTodos(true);
+    getTodos(true, loginAccount?.id!);
   };
 
   const onClickSubmit = async () => {
     const todo: Todo = {
-      account_id: 1,
+      account_id: loginAccount?.id,
       todo: newTodo,
       detail: todoDetail,
       completed: false,
@@ -60,7 +62,7 @@ export const Home: VFC = memo(() => {
     await createTodo(todo);
     setNewTodo("");
     setTodoDetail("");
-    getTodos(false);
+    getTodos(false, loginAccount?.id!);
   };
 
   const onClickTodo = useCallback(
@@ -71,7 +73,7 @@ export const Home: VFC = memo(() => {
   );
 
   const onCloseModal = () => {
-    getTodos(false);
+    getTodos(false, loginAccount?.id!);
     onClose();
   };
 

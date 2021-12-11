@@ -10,11 +10,11 @@ export const useAllTodos = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
-  const getTodos = useCallback((loading: boolean) => {
+  const getTodos = useCallback((loading: boolean, account_id: number) => {
     setLoading(loading);
     async function getTodos() {
       await axios
-        .get<Array<Todo>>("http://homestead.test/api/todos?account_id=1")
+        .get<Array<Todo>>(`http://homestead.test/api/todos?account_id=${account_id}`)
         .then((res) => {
           setTodos(res.data ?? []);
         })
