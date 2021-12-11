@@ -5,8 +5,10 @@ import { useHistory } from "react-router-dom";
 
 import { MenuIconButton } from "../../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../../molcules/MenuDrawer";
+import { useLoginAccount } from "../../../hooks/useLoginAccount";
 
 export const Header: VFC = memo(() => {
+  const { setLoginAccount } = useLoginAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
 
@@ -16,7 +18,10 @@ export const Header: VFC = memo(() => {
     []
   );
   const onClickSetting = useCallback(() => history.push("/home/setting"), []);
-  const onClickLogout = useCallback(() => history.push("/login"), []);
+  const onClickLogout = useCallback(() => {
+    setLoginAccount(undefined);
+    history.push("/login");
+  }, []);
 
   return (
     <>
