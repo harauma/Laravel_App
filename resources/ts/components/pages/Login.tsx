@@ -21,7 +21,7 @@ export const Login: VFC = memo(() => {
   const [show, setShow] = React.useState(false);
 
   const handleClick = () => setShow(!show);
-  const onClickLogin = () => login(userId);
+  const onClickLogin = () => login(userId, password);
   const onChangeUserId = (e: ChangeEvent<HTMLInputElement>) =>
     setUserId(e.target.value);
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>

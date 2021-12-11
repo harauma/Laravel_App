@@ -13,7 +13,7 @@ export const useDeleteTodo = () => {
     setLoading(true);
     async function deleteTodo() {
       await axios
-        .delete<Todo>("http://homestead.test/api/todos/" + todo.id, { data: todo })
+        .delete<Todo>(`http://homestead.test/api/todos/${todo.id}`, { data: todo })
         .then((_res) => {
           showMessage({ title: "todoの削除に成功しました", status: "success" })
         })

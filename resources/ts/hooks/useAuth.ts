@@ -2,31 +2,30 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { User } from "../types/api/user";
+import {  Account } from "../types/api/account";
 import { useMessage } from "./useMessage";
-import { useLoginUser } from "../hooks/useLoginUser";
+import { useLoginAccount } from "./useLoginAccount";
 
 export const useAuth = () => {
   const history = useHistory();
   const { showMessage } = useMessage();
-  const { setLoginUser } = useLoginUser();
+  const { setLoginAccount } = useLoginAccount();
 
   const [loading, setLoading] = useState(false);
 
   const login = useCallback(
-    (id: string) => {
+    (login_id: string, password: string) => {
       setLoading(true);
       axios
-        .get<User>(`https://jsonplaceholder.typicode.com/users/${id}`)
+        .post<Account>("http://homestead.test/api/login", {login_id: login_id, password: password})
         .then((res) => {
           if (res.data) {
-            const isAdmin = res.data.id === 10 ? true : false;
-            setLoginUser({ ...res.data, isAdmin });
+            setLoginAccount(res.data);
             showMessage({ title: "ログインしました", status: "success" });
             history.push("/home");
           } else {
             showMessage({
-              title: "ユーザーが見つかりません",
+              title: "アカウントが見つかりません",
               status: "error"
             });
             setLoading(false);
@@ -40,7 +39,7 @@ export const useAuth = () => {
           setLoading(false);
         });
     },
-    [history, showMessage, setLoginUser]
+    [history, showMessage, setLoginAccount]
   );
   return { login, loading };
 };

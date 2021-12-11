@@ -13,7 +13,7 @@ export const useUpdateTodo = () => {
     setLoading(true);
     async function updateTodo() {
       await axios
-        .put<Todo>("http://homestead.test/api/todos/" + todo.id, { todo })
+        .put<Todo>(`http://homestead.test/api/todos/${todo.id}`, { todo })
         .then((_res) => {
           showMessage({ title: "todoの更新に成功しました", status: "success" })
         })

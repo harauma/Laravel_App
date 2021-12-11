@@ -7,26 +7,24 @@ import {
   useState,
 } from "react";
 
-import { User } from "../types/api/user";
+import { Account } from "../types/api/account";
 
-type LoginUser = User & { isAdmin: boolean };
-
-export type LoginUserContextType = {
-  loginUser: LoginUser | null;
-  setLoginUser: Dispatch<SetStateAction<LoginUser | null>>;
+export type LoginAccountContextType = {
+  loginAccount: Account | undefined;
+  setLoginAccount: Dispatch<SetStateAction<Account | undefined>>;
 };
 
-export const LoginUserContext = createContext<LoginUserContextType | undefined>(
-  undefined
-);
+export const LoginAccountContext = createContext<
+  LoginAccountContextType | undefined
+>(undefined);
 
 export const LoginUserProvider = (props: { children: ReactNode }) => {
   const { children } = props;
-  const [loginUser, setLoginUser] = useState<LoginUser | null>(null);
+  const [loginAccount, setLoginAccount] = useState<Account | undefined>();
 
   return (
-    <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
+    <LoginAccountContext.Provider value={{ loginAccount, setLoginAccount }}>
       {children}
-    </LoginUserContext.Provider>
+    </LoginAccountContext.Provider>
   );
 };

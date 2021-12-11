@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SignupController extends Controller
 {
@@ -43,12 +44,15 @@ class SignupController extends Controller
     {
         $loginId = $request->input('login_id');
         $password = $request->input('password');
-
-        $account = Account::where('login_id', $loginId)->first();
-        if ($account->password == $password) {
-            return $account;
+        try {
+            $account = Account::where('login_id', $loginId)->first();
+            if ($account->password == $password) {
+                return $account;
+            }
+            return response()->json($account, Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            return response()->json($e, Response::HTTP_BAD_REQUEST);
         }
-        return null;
     }
 }
 // curl -X POST -H "Content-Type: application/json" -d '{"login_id":"abcdef","pasword":"aaa","name":"hoge","age":12345}' http://homestead.test/api/accounts
