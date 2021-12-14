@@ -46,8 +46,12 @@ class SignupController extends Controller
         $password = $request->input('password');
         try {
             $account = Account::where('login_id', $loginId)->first();
-            if ($account->password == $password) {
-                return $account;
+            if ($account->password !== $password) {
+                $responseData = [
+                    'login_id' => $loginId,
+                    'password' => $password,
+                ];
+                return response()->json($responseData, Response::HTTP_BAD_REQUEST);
             }
             return response()->json($account, Response::HTTP_OK);
         } catch (\Throwable $e) {
