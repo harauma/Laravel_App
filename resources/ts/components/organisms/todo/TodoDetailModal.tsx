@@ -22,6 +22,7 @@ import { Checkbox } from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
 import { useDeleteTodo } from "../../../hooks/useDeleteTodo";
 import { useUpdateTodo } from "../../../hooks/useUpdateTodo";
+import { useAllTags } from "../../../hooks/useAllTags";
 
 type Props = {
   todoInfo: Todo | null;
@@ -32,6 +33,7 @@ type Props = {
 
 export const TodoDetailModal: VFC<Props> = memo((props) => {
   const { todoInfo, isOpen, onClose } = props;
+  const { getTags, tags } = useAllTags();
   const { updateTodo, loading: updateLoading } = useUpdateTodo();
   const { deleteTodo, loading: deleteLoading } = useDeleteTodo();
   const [todo, setTodo] = useState<Todo>({});
@@ -39,6 +41,10 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
   useEffect(() => {
     setTodo(todoInfo ?? {});
   }, [todoInfo]);
+
+  useEffect(() => {
+    getTags();
+  }, []);
 
   const onChangeTodo = (e: ChangeEvent<HTMLInputElement>) => {
     setTodo({ ...todo, todo: e.target.value });
@@ -74,7 +80,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
         <ModalCloseButton />
         <ModalBody mx={4}>
           <Stack spacing={4}>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Todo</FormLabel>
               <Input value={todo.todo} onChange={onChangeTodo} />
             </FormControl>
@@ -100,7 +106,12 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <PrimaryButton mr="3" loading={updateLoading} onClick={onClickUpdate}>
+          <PrimaryButton
+            mr="3"
+            loading={updateLoading}
+            onClick={onClickUpdate}
+            disabled={todo.todo === ""}
+          >
             更新
           </PrimaryButton>
           <Button
