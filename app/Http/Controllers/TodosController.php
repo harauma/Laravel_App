@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -60,6 +61,21 @@ class TodosController extends Controller
      */
     public function create(Request $request)
     {
+        $rulus = [
+            'todo.todo' => 'required',
+            'todo.account_id' => 'required',
+        ];
+
+        $message = [
+            'todo.todo.required' => 'Todoを入力してください',
+            'todo.account_id.required' => 'ユーザーIDを入力してください',
+        ];
+
+        $validator = Validator::make($request->all(), $rulus, $message);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }
+
         $todo = new Todo($request->input('todo'));
         $accoutsController = app()->make('App\Http\Controllers\AccoutsController');
         $accountId = $todo['account_id'];
@@ -80,8 +96,24 @@ class TodosController extends Controller
      */
     public function update($id, Request $request)
     {
+        $rulus = [
+            'todo.todo' => 'required',
+            'todo.account_id' => 'required',
+        ];
+
+        $message = [
+            'todo.todo.required' => 'Todoを入力してください',
+            'todo.account_id.required' => 'ユーザーIDを入力してください',
+        ];
+
+        $validator = Validator::make($request->all(), $rulus, $message);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }
+
         $request_todo = new Todo($request->input('todo'));
         $accountId = $request_todo['account_id'];
+
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
