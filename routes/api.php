@@ -3,6 +3,7 @@
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\AccoutsController;
 use App\Http\Controllers\TodosController;
+use App\Http\Controllers\TagsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,5 @@ Route::put('/todos/{id}', [TodosController::class, 'update']);
 Route::delete('/todos/{id}', [TodosController::class, 'destroy']);
 
 Route::post('/login', [SignupController::class, 'login']);
+
+Route::get('/tags', [TagsController::class, 'list']);
