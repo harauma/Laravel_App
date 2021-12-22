@@ -37,19 +37,22 @@ export const UserManagement: VFC = memo(() => {
           <Spinner />
         </Center>
       ) : (
-        <Wrap p={{ base: 4, md: 10 }}>
-          {users?.map((user) => (
-            <WrapItem key={user.id} mx="auto">
-              <UserCard
-                id={user.id}
-                imageUrl="https://source.unsplash.com/random"
-                userName={user.username}
-                fullName={user.name}
-                onClick={onClickUser}
-              />
-            </WrapItem>
-          ))}
-        </Wrap>
+        <>
+          <p>※サンプルページのため外部APIのテストデータです</p>
+          <Wrap p={{ base: 4, md: 10 }}>
+            {users?.map((user) => (
+              <WrapItem key={user.id} mx="auto">
+                <UserCard
+                  id={user.id}
+                  imageUrl="https://source.unsplash.com/random"
+                  userName={user.username}
+                  fullName={user.name}
+                  onClick={onClickUser}
+                />
+              </WrapItem>
+            ))}
+          </Wrap>
+        </>
       )}
       <UserDetailModal
         user={selectedUser}
