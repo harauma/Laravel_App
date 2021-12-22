@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SignupController;
+use App\Http\Controllers\TagsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,12 @@ use App\Http\Controllers\SignupController;
 |
 */
 
-Route::get('signup', [SignupController::class, 'index'])->name('signup');
-Route::post('signup', [SignupController::class, 'store']);
+Route::get('tag-setting', [TagsController::class, 'index'])->name('tagSetting');
+Route::post('tag-setting', [TagsController::class, 'store']);
+Route::delete('tag-setting/{id}', [TagsController::class, 'destroy']);
+// Route::get('info', function () {
+//     phpinfo();
+// });
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');
