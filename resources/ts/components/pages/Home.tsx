@@ -9,6 +9,8 @@ import {
 } from "react";
 import {
   Center,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Spinner,
@@ -32,17 +34,27 @@ import { useCreateTodo } from "../../hooks/useCreateTodo";
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { useSelectTodo } from "../../hooks/useSelectTodo";
 import { useLoginAccount } from "../../hooks/useLoginAccount";
+import { isEmpty, isNil } from 'lodash';
 
 export const Home: VFC = memo(() => {
   const { loginAccount } = useLoginAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { getTodos, todos, loading: getLoading } = useAllTodos();
+  const {
+    getTodos,
+    todos,
+    completedTodos,
+    loading: getLoading,
+  } = useAllTodos();
   const { createTodo, loading: createLoading } = useCreateTodo();
   const { onSelectTodo, selectedTodo } = useSelectTodo();
   const [newTodo, setNewTodo] = useState("");
   const [todoDetail, setTodoDetail] = useState("");
 
-  useEffect(() => getTodos(true, loginAccount?.id!), []);
+  useEffect(() => {
+    if (!isNil(loginAccount)) {
+      getTodos(true, loginAccount?.id!);
+    }
+  }, [loginAccount]);
 
   const onChangeNewTodo = (e: ChangeEvent<HTMLInputElement>) =>
     setNewTodo(e.target.value);
@@ -72,6 +84,13 @@ export const Home: VFC = memo(() => {
     [todos, onSelectTodo, onOpen]
   );
 
+  const onClickCompletedTodo = useCallback(
+    (id: number) => {
+      onSelectTodo({ id, todos: completedTodos, onOpen });
+    },
+    [completedTodos, onSelectTodo, onOpen]
+  );
+
   const onCloseModal = () => {
     getTodos(false, loginAccount?.id!);
     onClose();
@@ -93,16 +112,22 @@ export const Home: VFC = memo(() => {
           <TabPanels>
             <TabPanel>
               <Stack spacing={3}>
-                <Input
-                  placeholder="Todoを入力"
-                  value={newTodo}
-                  onChange={onChangeNewTodo}
-                />
-                <Textarea
-                  placeholder="Todoの詳細を入力"
-                  value={todoDetail}
-                  onChange={onChangeTodoDetail}
-                />
+                <FormControl id="todo" isRequired>
+                  <FormLabel>Todo</FormLabel>
+                  <Input
+                    placeholder="Todoを入力"
+                    value={newTodo}
+                    onChange={onChangeNewTodo}
+                  />
+                </FormControl>
+                <FormControl id="todoDetail">
+                  <FormLabel>Todo詳細</FormLabel>
+                  <Textarea
+                    placeholder="Todo詳細を入力"
+                    value={todoDetail}
+                    onChange={onChangeTodoDetail}
+                  />
+                </FormControl>
                 <PrimaryButton
                   disabled={newTodo === ""}
                   loading={createLoading}
@@ -115,7 +140,7 @@ export const Home: VFC = memo(() => {
                   Todo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
+                  {!isEmpty(todos) ? (
                     todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
@@ -124,127 +149,191 @@ export const Home: VFC = memo(() => {
                       />
                     ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">Todoが登録されていません</Text>
                   )}
                 </Wrap>
                 <Heading as="h2" size="md">
                   完了したTodo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
-                    todos?.map((todo: Todo) => (
+                  {!isEmpty(completedTodos) ? (
+                    completedTodos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
                         todo={todo}
-                        onClick={onClickTodo}
+                        onClick={onClickCompletedTodo}
                       />
                     ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">完了したTodoがありません</Text>
                   )}
                 </Wrap>
               </Stack>
             </TabPanel>
             <TabPanel>
               <Stack spacing={3}>
-                <Input placeholder="Todoを入力" />
-                <Textarea placeholder="Todoの詳細を入力" />
+                <FormControl id="todo" isRequired>
+                  <FormLabel>Todo</FormLabel>
+                  <Input
+                    placeholder="Todoを入力"
+                    value={newTodo}
+                    onChange={onChangeNewTodo}
+                  />
+                </FormControl>
+                <FormControl id="todoDetail">
+                  <FormLabel>Todo詳細</FormLabel>
+                  <Textarea
+                    placeholder="Todo詳細を入力"
+                    value={todoDetail}
+                    onChange={onChangeTodoDetail}
+                  />
+                </FormControl>
+                <PrimaryButton
+                  disabled={newTodo === ""}
+                  loading={createLoading}
+                  onClick={onClickSubmit}
+                >
+                  登録
+                </PrimaryButton>
+                <PrimaryButton onClick={onClickGetTodo}>todo取得</PrimaryButton>
                 <Heading as="h2" size="md">
                   Todo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
-                    (todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )),
+                  {!isEmpty(todos) ? (
                     todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )))
+                      <>
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                      </>
+                    ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">Todoが登録されていません</Text>
                   )}
                 </Wrap>
                 <Heading as="h2" size="md">
                   完了したTodo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
-                    (todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )),
-                    todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )))
+                  {!isEmpty(completedTodos) ? (
+                    completedTodos?.map((todo: Todo) => (
+                      <>
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                      </>
+                    ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">完了したTodoがありません</Text>
                   )}
                 </Wrap>
               </Stack>
             </TabPanel>
             <TabPanel>
               <Stack spacing={3}>
-                <Input placeholder="Todoを入力" />
-                <Textarea placeholder="Todoの詳細を入力" />
+                <FormControl id="todo" isRequired>
+                  <FormLabel>Todo</FormLabel>
+                  <Input
+                    placeholder="Todoを入力"
+                    value={newTodo}
+                    onChange={onChangeNewTodo}
+                  />
+                </FormControl>
+                <FormControl id="todoDetail">
+                  <FormLabel>Todo詳細</FormLabel>
+                  <Textarea
+                    placeholder="Todo詳細を入力"
+                    value={todoDetail}
+                    onChange={onChangeTodoDetail}
+                  />
+                </FormControl>
+                <PrimaryButton
+                  disabled={newTodo === ""}
+                  loading={createLoading}
+                  onClick={onClickSubmit}
+                >
+                  登録
+                </PrimaryButton>
+                <PrimaryButton onClick={onClickGetTodo}>todo取得</PrimaryButton>
                 <Heading as="h2" size="md">
                   Todo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
-                    (todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )),
+                  {!isEmpty(todos) ? (
                     todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )))
+                      <>
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickTodo}
+                        />
+                      </>
+                    ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">Todoが登録されていません</Text>
                   )}
                 </Wrap>
                 <Heading as="h2" size="md">
                   完了したTodo一覧
                 </Heading>
                 <Wrap>
-                  {todos ? (
-                    (todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )),
-                    todos?.map((todo: Todo) => (
-                      <TodoCard
-                        id={todo.id!}
-                        todo={todo}
-                        onClick={onClickTodo}
-                      />
-                    )))
+                  {!isEmpty(completedTodos) ? (
+                    completedTodos?.map((todo: Todo) => (
+                      <>
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                        <TodoCard
+                          id={todo.id!}
+                          todo={todo}
+                          onClick={onClickCompletedTodo}
+                        />
+                      </>
+                    ))
                   ) : (
-                    <Text fontSize="md">まだTodoが登録されていません</Text>
+                    <Text fontSize="md">完了したTodoがありません</Text>
                   )}
                 </Wrap>
               </Stack>
