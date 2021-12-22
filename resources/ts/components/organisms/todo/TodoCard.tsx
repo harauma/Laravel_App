@@ -14,11 +14,11 @@ export const TodoCard: VFC<Props> = memo((props) => {
   const { id, todo, onClick } = props;
   const [completed, setCompleted] = useState(false);
 
-  const onChangeCompleted = useCallback((e) => {
-    console.log(e.target.checked);
-    setCompleted(e.target.checked);
-    // todo更新API
-  }, []);
+  // const onChangeCompleted = useCallback((e) => {
+  //   console.log(e.target.checked);
+  //   setCompleted(e.target.checked);
+  //   // todo更新API
+  // }, []);
 
   useEffect(() => {
     setCompleted(todo?.completed ?? false);
@@ -50,7 +50,9 @@ export const TodoCard: VFC<Props> = memo((props) => {
           colorScheme="green"
           value={todo.id}
           isChecked={completed}
-          onChange={onChangeCompleted}
+          // onChange={onChangeCompleted}
+          disabled={true}
+          readOnly={true}
         >
           <Text fontSize="md">完了しました？</Text>
         </Checkbox>
