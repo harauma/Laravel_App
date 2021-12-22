@@ -20,9 +20,9 @@ export const useAuth = () => {
         .post<Account>("http://homestead.test/api/login", {login_id: login_id, password: password})
         .then((res) => {
           if (res.data) {
-            setLoginAccount(res.data);
+            setLoginAccount({id: res.data.id!, name: res.data.name!});
             showMessage({ title: "ログインしました", status: "success" });
-            history.push("/home");
+            history.push("home");
           } else {
             showMessage({
               title: "アカウントが見つかりません",
