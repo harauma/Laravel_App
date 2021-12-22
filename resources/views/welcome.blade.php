@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Todoシェアリング</title>
+    <title>Todo管理アプリ</title>
 </head>
 
 <body>
