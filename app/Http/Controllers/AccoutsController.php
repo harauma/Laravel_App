@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -51,13 +52,25 @@ class AccoutsController extends Controller
      */
     public function create(Request $request)
     {
-        // $validated = $request->validate([
-        // 	'login_id' => 'required|min:4|max:255',
-        // 	'password' => 'required|min:4|max:24',
-        // 	'name' => 'required',
-        // 	'age' => 'required|numeric',
-        // ]);
-        // return view('signup', ['accounts' => Account::all()]);
+        $rulus = [
+            'login_id' => 'required|max:32|unique:accounts',
+            'password' => 'required',
+            'name' => 'required',
+        ];
+
+        $message = [
+            'login_id.required' => 'ユーザーIDを入力してください',
+            'login_id.unique' => 'このユーザーIDは使用できません',
+            'login_id.max' => 'ユーザーIDは最大:max文字です',
+            'password.required' => 'パスワードを入力してください',
+            'name.required' => 'ユーザー名を入力してください',
+        ];
+
+        $validator = Validator::make($request->all(), $rulus, $message);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             $account = new Account();
             $account->login_id = $request->input('login_id');
@@ -66,7 +79,7 @@ class AccoutsController extends Controller
             $account->save();
             return response()->json($account, Response::HTTP_CREATED);
         } catch (\Throwable $e) {
-            return response()->json($account, Response::HTTP_BAD_REQUEST);
+            return response()->json($e, Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -75,6 +88,24 @@ class AccoutsController extends Controller
      */
     public function update($id, Request $request)
     {
+        $rulus = [
+            'login_id' => 'required|max:32',
+            'password' => 'required',
+            'name' => 'required',
+        ];
+
+        $message = [
+            'login_id.required' => 'ユーザーIDを入力してください',
+            'login_id.max' => 'ユーザーIDは最大:max文字です',
+            'password.required' => 'パスワードを入力してください',
+            'name.required' => 'ユーザー名を入力してください',
+        ];
+
+        $validator = Validator::make($request->all(), $rulus, $message);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             $account = Account::find($id);
             $account->login_id = $request->input('login_id');
