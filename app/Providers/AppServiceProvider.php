@@ -29,5 +29,8 @@ class AppServiceProvider extends ServiceProvider
         if (request()->isSecure()) {
             URL::forceScheme('https');
         }
+        if ($this->app->environment() == 'heroku') {
+            URL::forceScheme('https');
+        }
     }
 }
