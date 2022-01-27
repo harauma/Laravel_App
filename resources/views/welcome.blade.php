@@ -11,10 +11,5 @@
     <div id="app"></div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}" defer></script>
-<script>
-    let apiUrl = '{{ $api_url }}';
-    console.log('apiUrl!!!');
-    console.log(apiUrl);
-</script>
 
 </html>

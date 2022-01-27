@@ -28,7 +28,5 @@ Route::delete('tag-setting/{id}', [TagsController::class, 'destroy']);
 //     phpinfo();
 // });
 Route::get('/{any}', function () {
-    return view('welcome', [
-        'api_url' => env('API_URL'),
-    ]);
+    return view('welcome');
 })->where('any', '.*');

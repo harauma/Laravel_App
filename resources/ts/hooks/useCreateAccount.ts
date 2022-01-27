@@ -9,13 +9,9 @@ export const useCreateAccount = () => {
   const history = useHistory();
   const { showMessage } = useMessage();
   const [loading, setLoading] = useState(false);
-  // @ts-ignore
-  const api_url = api_url;
 
   const createAccount = useCallback((account: Account) => {
     setLoading(true);
-    console.log('api_url');
-    console.log(api_url);
     async function createAccount() {
       await axios
         .post<Account>("api/accounts", account)
