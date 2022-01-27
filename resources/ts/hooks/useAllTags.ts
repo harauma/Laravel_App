@@ -15,7 +15,7 @@ export const useAllTags = () => {
     setLoading(loading);
     async function getTags() {
       await axios
-        .get<Array<Tag>>("http://homestead.test/api/tags")
+        .get<Array<Tag>>("api/tags")
         .then((res) => {
           if (isEmpty(res.data)) {
             setTags([]);

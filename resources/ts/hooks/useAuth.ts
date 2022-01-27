@@ -17,7 +17,7 @@ export const useAuth = () => {
     (login_id: string, password: string) => {
       setLoading(true);
       axios
-        .post<Account>("http://homestead.test/api/login", {login_id: login_id, password: password})
+        .post<Account>("api/login", {login_id: login_id, password: password})
         .then((res) => {
           if (res.data) {
             setLoginAccount({id: res.data.id!, name: res.data.name!});

@@ -12,7 +12,7 @@ export const useCreateTodo = () => {
     setLoading(true);
     async function createTodo() {
       await axios
-        .post<Todo>("http://homestead.test/api/todos", { todo })
+        .post<Todo>("api/todos", { todo })
         .then((_res) => {
           showMessage({ title: "todoの登録に成功しました", status: "success" });
         })
