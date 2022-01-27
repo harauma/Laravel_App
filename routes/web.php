@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagsController;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,11 @@ use App\Http\Controllers\TagsController;
 |
 */
 
+if (config('app.env') === 'heroku') {
+    // asset()やurl()がhttpsで生成される
+    URL::forceScheme('https');
+}
+
 Route::get('tag-setting', [TagsController::class, 'index'])->name('tagSetting');
 Route::post('tag-setting', [TagsController::class, 'store']);
 Route::delete('tag-setting/{id}', [TagsController::class, 'destroy']);
@@ -21,5 +28,7 @@ Route::delete('tag-setting/{id}', [TagsController::class, 'destroy']);
 //     phpinfo();
 // });
 Route::get('/{any}', function () {
-    return view('welcome');
+    return view('welcome', [
+        'api_url' => env('API_URL'),
+    ]);
 })->where('any', '.*');
