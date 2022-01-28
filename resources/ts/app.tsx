@@ -7,7 +7,6 @@ import theme from "./theme/theme";
 import { Router } from "./router/Router";
 
 const App = () => {
-  const title: string = "TypeScript React !!!!";
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
