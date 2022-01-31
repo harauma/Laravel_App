@@ -1,9 +1,11 @@
 import React from "react";
 import {
   ChangeEvent,
+  KeyboardEvent,
   memo,
   useCallback,
   useEffect,
+  useRef,
   useState,
   VFC,
 } from "react";
@@ -35,6 +37,7 @@ export const Login: VFC = memo(() => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const passwordElement = useRef<HTMLInputElement>(null);
 
   const handleClick = () => setShow(!show);
   const onClickLogin = () => login(userId, password);
@@ -43,6 +46,16 @@ export const Login: VFC = memo(() => {
     setUserId(e.target.value);
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
+  const onKeyPressId = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      passwordElement.current?.focus();
+    }
+  };
+  const onKeyPressPass = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      login(userId, password);
+    }
+  };
 
   useEffect(() => {
     if (!isNil(sessionStorage.user_id)) {
@@ -65,18 +78,21 @@ export const Login: VFC = memo(() => {
               placeholder="ユーザID"
               value={userId}
               onChange={onChangeUserId}
+              onKeyPress={onKeyPressId}
             />
           </FormControl>
           <FormControl id="password">
             <FormLabel>パスワード</FormLabel>
             <InputGroup size="md">
               <Input
+                ref={passwordElement}
                 pr="4.5rem"
                 type={show ? "text" : "password"}
                 isRequired={true}
                 placeholder="パスワード"
                 value={password}
                 onChange={onChangePassword}
+                onKeyPress={onKeyPressPass}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleClick}>
