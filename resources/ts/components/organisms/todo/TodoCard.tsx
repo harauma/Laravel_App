@@ -1,7 +1,16 @@
 import React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { memo, VFC } from "react";
-import { Badge, Box, Checkbox, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Checkbox,
+  HStack,
+  Stack,
+  Tag,
+  TagCloseButton,
+  TagLabel,
+  Text,
+} from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
 
 type Props = {
@@ -47,18 +56,25 @@ export const TodoCard: VFC<Props> = memo((props) => {
         </Text>
         <Checkbox
           size="md"
-          colorScheme="green"
+          colorScheme="teal"
           value={todo.id}
           isChecked={completed}
           // onChange={onChangeCompleted}
           disabled={true}
           readOnly={true}
         >
-          <Text fontSize="md">完了しました？</Text>
+          <Text fontSize="sm">完了しました？</Text>
         </Checkbox>
-        <Badge variant="solid" colorScheme="green">
-          aaa
-        </Badge>
+        <HStack spacing={2}>
+          <Tag size="sm" borderRadius="full" variant="solid" colorScheme="teal">
+            <TagLabel>仕事</TagLabel>
+            <TagCloseButton />
+          </Tag>
+          <Tag size="sm" borderRadius="full" variant="solid" colorScheme="teal">
+            <TagLabel>買い物</TagLabel>
+            <TagCloseButton />
+          </Tag>
+        </HStack>
       </Stack>
     </Box>
   );
