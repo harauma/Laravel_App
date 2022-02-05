@@ -57,14 +57,23 @@ export const Home: VFC = memo(() => {
     }
   }, [loginAccount]);
 
+  /**
+   * 新規Todo入力値変更時処理
+   * @param e ChangeEvent<HTMLInputElement>
+   */
   const onChangeNewTodo = (e: ChangeEvent<HTMLInputElement>) =>
     setNewTodo(e.target.value);
+
+  /**
+   * 新規Todo詳細入力値変更時処理
+   * @param e ChangeEvent<HTMLInputElement>
+   */
   const onChangeTodoDetail = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setTodoDetail(e.target.value);
-  const onClickGetTodo = () => {
-    getTodos(true, loginAccount?.id!);
-  };
 
+  /**
+   * Todo新規登録ボタン押下時処理
+   */
   const onClickSubmit = async () => {
     const todo: Todo = {
       account_id: loginAccount?.id,
@@ -72,17 +81,34 @@ export const Home: VFC = memo(() => {
       detail: todoDetail,
       completed: false,
     };
+    // Todo作成処理
     await createTodo(todo);
+    // 新規TodoのInput欄初期化
     setNewTodo("");
     setTodoDetail("");
+    // 最新のTodoを取得
     getTodos(false, loginAccount?.id!);
   };
 
+  /**
+   * Todo取得ボタン押下時処理
+   */
+  const onClickGetTodo = () => {
+    getTodos(true, loginAccount?.id!);
+  };
+
+  /**
+   * Todo取得ボタン押下時処理
+   * @param e ChangeEvent<HTMLInputElement>
+   */
   const onClickAdd = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation;
-    console.log(e);
   }, []);
 
+  /**
+   * Todo取得ボタン押下時処理
+   * @param id number
+   */
   const onClickTodo = useCallback(
     (id: number) => {
       onSelectTodo({ id, todos, onOpen });
@@ -90,6 +116,10 @@ export const Home: VFC = memo(() => {
     [todos, onSelectTodo, onOpen]
   );
 
+  /**
+   * Todo完了チェックボックス押下時処理
+   * @param id number
+   */
   const onClickCompletedTodo = useCallback(
     (id: number) => {
       onSelectTodo({ id, todos: completedTodos, onOpen });
@@ -97,6 +127,10 @@ export const Home: VFC = memo(() => {
     [completedTodos, onSelectTodo, onOpen]
   );
 
+  /**
+   * Todo詳細モーダルクローズ処理
+   * @param id number
+   */
   const onCloseModal = () => {
     getTodos(false, loginAccount?.id!);
     onClose();
