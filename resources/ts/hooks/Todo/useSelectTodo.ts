@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { Todo } from "../types/api/todo";
+import { Todo } from "../../types/api/todo";
 
 type Props = {
   id: number;

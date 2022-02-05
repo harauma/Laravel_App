@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
 
-import { Todo } from "../types/api/todo";
-import { useMessage } from "./useMessage";
+import { Todo } from "../../types/api/todo";
+import { useMessage } from "../useMessage";
 import { filter, isEmpty } from "lodash";
 
 export const useAllTodos = () => {

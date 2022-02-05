@@ -20,8 +20,8 @@ import {
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { Checkbox } from "@chakra-ui/react";
 import { Todo } from "../../../types/api/todo";
-import { useDeleteTodo } from "../../../hooks/useDeleteTodo";
-import { useUpdateTodo } from "../../../hooks/useUpdateTodo";
+import { useDeleteTodo } from "../../../hooks/Todo/useDeleteTodo";
+import { useUpdateTodo } from "../../../hooks/Todo/useUpdateTodo";
 import { useAllTags } from "../../../hooks/useAllTags";
 
 type Props = {
