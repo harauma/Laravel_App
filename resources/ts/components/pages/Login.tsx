@@ -103,7 +103,7 @@ export const Login: VFC = memo(() => {
           </FormControl>
           <PrimaryButton
             disabled={userId === "" || password === ""}
-            loading={loading}
+            isLoading={loading}
             onClick={onClickLogin}
           >
             ログイン

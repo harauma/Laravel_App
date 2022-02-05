@@ -90,7 +90,7 @@ export const Signup: VFC = memo(() => {
           </FormControl>
           <PrimaryButton
             disabled={userId === "" || userName === "" || password === ""}
-            loading={loading}
+            isLoading={loading}
             onClick={onClickSubmit}
           >
             新規登録

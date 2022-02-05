@@ -95,7 +95,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
             <FormControl>
               <Checkbox
                 size="md"
-                colorScheme="green"
+                colorScheme="teal"
                 value={todo.id}
                 isChecked={todo.completed}
                 onChange={onChangeCompleted}
@@ -108,7 +108,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
         <ModalFooter>
           <PrimaryButton
             mr="3"
-            loading={updateLoading}
+            isLoading={updateLoading}
             onClick={onClickUpdate}
             disabled={todo.todo === ""}
           >

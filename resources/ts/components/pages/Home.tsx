@@ -1,6 +1,7 @@
 import React from "react";
 import {
   ChangeEvent,
+  MouseEvent,
   memo,
   useCallback,
   useEffect,
@@ -34,7 +35,7 @@ import { useCreateTodo } from "../../hooks/Todo/useCreateTodo";
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { useSelectTodo } from "../../hooks/Todo/useSelectTodo";
 import { useLoginAccount } from "../../hooks/useLoginAccount";
-import { isEmpty, isNil } from 'lodash';
+import { isEmpty, isNil } from "lodash";
 
 export const Home: VFC = memo(() => {
   const { loginAccount } = useLoginAccount();
@@ -77,6 +78,11 @@ export const Home: VFC = memo(() => {
     getTodos(false, loginAccount?.id!);
   };
 
+  const onClickAdd = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation;
+    console.log(e);
+  }, []);
+
   const onClickTodo = useCallback(
     (id: number) => {
       onSelectTodo({ id, todos, onOpen });
@@ -103,11 +109,16 @@ export const Home: VFC = memo(() => {
           <Spinner />
         </Center>
       ) : (
-        <Tabs size="lg" variant="enclosed" colorScheme="green">
+        <Tabs isFitted size="lg" variant="enclosed" colorScheme="green">
           <TabList>
             <Tab>One</Tab>
             <Tab>Two</Tab>
             <Tab>Three</Tab>
+            <Tab isDisabled>
+              <PrimaryButton size="sm" variant="outline" onClick={onClickAdd}>
+                +
+              </PrimaryButton>
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -130,7 +141,7 @@ export const Home: VFC = memo(() => {
                 </FormControl>
                 <PrimaryButton
                   disabled={newTodo === ""}
-                  loading={createLoading}
+                  isLoading={createLoading}
                   onClick={onClickSubmit}
                 >
                   登録
@@ -144,6 +155,7 @@ export const Home: VFC = memo(() => {
                     todos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
+                        key={todo.id}
                         todo={todo}
                         onClick={onClickTodo}
                       />
@@ -160,6 +172,7 @@ export const Home: VFC = memo(() => {
                     completedTodos?.map((todo: Todo) => (
                       <TodoCard
                         id={todo.id!}
+                        key={todo.id}
                         todo={todo}
                         onClick={onClickCompletedTodo}
                       />
@@ -190,7 +203,7 @@ export const Home: VFC = memo(() => {
                 </FormControl>
                 <PrimaryButton
                   disabled={newTodo === ""}
-                  loading={createLoading}
+                  isLoading={createLoading}
                   onClick={onClickSubmit}
                 >
                   登録
@@ -264,7 +277,7 @@ export const Home: VFC = memo(() => {
                 </FormControl>
                 <PrimaryButton
                   disabled={newTodo === ""}
-                  loading={createLoading}
+                  isLoading={createLoading}
                   onClick={onClickSubmit}
                 >
                   登録
