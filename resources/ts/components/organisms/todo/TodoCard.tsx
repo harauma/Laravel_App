@@ -1,5 +1,11 @@
 import React from "react";
-import { useCallback, useEffect, useState } from "react";
+import {
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useState,
+  ChangeEvent,
+} from "react";
 import { memo, VFC } from "react";
 import {
   Box,
@@ -17,17 +23,51 @@ type Props = {
   id: number;
   todo: Todo;
   onClick: (id: number) => void;
+  updateTodo: (todo: Todo) => void;
 };
 
 export const TodoCard: VFC<Props> = memo((props) => {
-  const { id, todo, onClick } = props;
+  const { id, todo, onClick, updateTodo } = props;
   const [completed, setCompleted] = useState(false);
 
-  // const onChangeCompleted = useCallback((e) => {
-  //   console.log(e.target.checked);
-  //   setCompleted(e.target.checked);
-  //   // todo更新API
-  // }, []);
+  /**
+   * Todo完了チェックボックス押下時処理
+   * @param e ChangeEvent<HTMLInputElement>
+   */
+  const onChangeCompleted = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setCompleted(e.target.checked);
+    // todo更新API
+    updateTodo({ ...todo, completed: e.target.checked });
+  }, []);
+
+  /**
+   * Todoカード領域押下時処理
+   * @param e MouseEvent<HTMLDivElement>
+   */
+  const onClickCard = (e: MouseEvent<HTMLDivElement>) => {
+    // 判別用にクリックされた要素を取得
+    const element = e.target as HTMLElement;
+    switch (element.tagName) {
+      // カード上で別イベントがある場合はモーダル表示しない
+      case "INPUT":
+      case "LABEL":
+      case "SPAN":
+      case "svg":
+      case "polyline":
+      case "path":
+        break;
+      case "P":
+        // チェックボックスの文字列クリック時はモーダル表示しない
+        const classList = element.parentElement?.classList.value || "";
+        if (classList.indexOf("chakra-checkbox") !== -1) {
+          break;
+        }
+      default:
+        // Todo詳細モーダル表示
+        onClick(id);
+        break;
+    }
+  };
 
   useEffect(() => {
     setCompleted(todo?.completed ?? false);
@@ -41,7 +81,7 @@ export const TodoCard: VFC<Props> = memo((props) => {
       borderRadius="10px"
       shadow="md"
       p={4}
-      onClick={() => onClick(id)}
+      onClick={onClickCard}
       _hover={{ cursor: "pointer", opacity: 0.8 }}
     >
       <Stack justify="space-between">
@@ -59,9 +99,7 @@ export const TodoCard: VFC<Props> = memo((props) => {
           colorScheme="teal"
           value={todo.id}
           isChecked={completed}
-          // onChange={onChangeCompleted}
-          disabled={true}
-          readOnly={true}
+          onChange={onChangeCompleted}
         >
           <Text fontSize="sm">完了しました？</Text>
         </Checkbox>

@@ -36,6 +36,7 @@ import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { useSelectTodo } from "../../hooks/Todo/useSelectTodo";
 import { useLoginAccount } from "../../hooks/useLoginAccount";
 import { isEmpty, isNil } from "lodash";
+import { useUpdateTodo } from "../../hooks/Todo/useUpdateTodo";
 
 export const Home: VFC = memo(() => {
   const { loginAccount } = useLoginAccount();
@@ -47,6 +48,7 @@ export const Home: VFC = memo(() => {
     loading: getLoading,
   } = useAllTodos();
   const { createTodo, loading: createLoading } = useCreateTodo();
+  const { updateTodo } = useUpdateTodo();
   const { onSelectTodo, selectedTodo } = useSelectTodo();
   const [newTodo, setNewTodo] = useState("");
   const [todoDetail, setTodoDetail] = useState("");
@@ -98,15 +100,15 @@ export const Home: VFC = memo(() => {
   };
 
   /**
-   * Todo取得ボタン押下時処理
+   * 新規タブ作成ボタン押下時処理
    * @param e ChangeEvent<HTMLInputElement>
    */
-  const onClickAdd = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation;
+  const onClickCreateTab = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    // Todo 新規タブ作成の処理
   }, []);
 
   /**
-   * Todo取得ボタン押下時処理
+   * 未完了Todoカード選択時処理
    * @param id number
    */
   const onClickTodo = useCallback(
@@ -117,7 +119,7 @@ export const Home: VFC = memo(() => {
   );
 
   /**
-   * Todo完了チェックボックス押下時処理
+   * 完了済Todoカード選択時処理
    * @param id number
    */
   const onClickCompletedTodo = useCallback(
@@ -126,6 +128,18 @@ export const Home: VFC = memo(() => {
     },
     [completedTodos, onSelectTodo, onOpen]
   );
+
+  /**
+   * Todo更新処理
+   * @param todo Todo
+   */
+  const onClickUpdate = useCallback((todo: Todo) => {
+    const update = async () => {
+      await updateTodo(todo);
+      await getTodos(false, todo.account_id!);
+    };
+    update();
+  }, []);
 
   /**
    * Todo詳細モーダルクローズ処理
@@ -149,7 +163,11 @@ export const Home: VFC = memo(() => {
             <Tab>Two</Tab>
             <Tab>Three</Tab>
             <Tab isDisabled>
-              <PrimaryButton size="sm" variant="outline" onClick={onClickAdd}>
+              <PrimaryButton
+                size="sm"
+                variant="outline"
+                onClick={onClickCreateTab}
+              >
                 +
               </PrimaryButton>
             </Tab>
@@ -192,6 +210,7 @@ export const Home: VFC = memo(() => {
                         key={todo.id}
                         todo={todo}
                         onClick={onClickTodo}
+                        updateTodo={onClickUpdate}
                       />
                     ))
                   ) : (
@@ -209,6 +228,7 @@ export const Home: VFC = memo(() => {
                         key={todo.id}
                         todo={todo}
                         onClick={onClickCompletedTodo}
+                        updateTodo={onClickUpdate}
                       />
                     ))
                   ) : (
@@ -254,11 +274,13 @@ export const Home: VFC = memo(() => {
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                       </>
                     ))
@@ -277,11 +299,13 @@ export const Home: VFC = memo(() => {
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                       </>
                     ))
@@ -328,21 +352,25 @@ export const Home: VFC = memo(() => {
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickTodo}
+                          updateTodo={onClickUpdate}
                         />
                       </>
                     ))
@@ -361,21 +389,25 @@ export const Home: VFC = memo(() => {
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                         <TodoCard
                           id={todo.id!}
                           todo={todo}
                           onClick={onClickCompletedTodo}
+                          updateTodo={onClickUpdate}
                         />
                       </>
                     ))
