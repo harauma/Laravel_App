@@ -1,5 +1,5 @@
 import React from "react";
-import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
+import { ChangeEvent, memo, useEffect, useRef, useState, VFC } from "react";
 import {
   FormLabel,
   FormControl,
@@ -37,6 +37,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
   const { updateTodo, loading: updateLoading } = useUpdateTodo();
   const { deleteTodo, loading: deleteLoading } = useDeleteTodo();
   const [todo, setTodo] = useState<Todo>({});
+  const initialRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTodo(todoInfo ?? {});
@@ -69,9 +70,10 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
 
   return (
     <Modal
+      initialFocusRef={initialRef}
       isOpen={isOpen}
       onClose={onClose}
-      autoFocus={false}
+      size="xl"
       motionPreset="slideInBottom"
     >
       <ModalOverlay />
@@ -82,7 +84,11 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
           <Stack spacing={4}>
             <FormControl isRequired>
               <FormLabel>Todo</FormLabel>
-              <Input value={todo.todo} onChange={onChangeTodo} />
+              <Input
+                ref={initialRef}
+                value={todo.todo}
+                onChange={onChangeTodo}
+              />
             </FormControl>
             <FormControl>
               <FormLabel>Todo詳細</FormLabel>
@@ -105,7 +111,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
             </FormControl>
           </Stack>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter justifyContent="center">
           <PrimaryButton
             mr="3"
             isLoading={updateLoading}

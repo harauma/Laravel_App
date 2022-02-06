@@ -88,9 +88,9 @@ export const TodoCard: VFC<Props> = memo((props) => {
         <Text fontSize="lg" fontWeight="bold">
           {todo.todo}
         </Text>
-        <Text fontSize="md" whiteSpace="pre-wrap">
+        {/* <Text fontSize="md" whiteSpace="pre-wrap">
           {todo.detail}
-        </Text>
+        </Text> */}
         <Text fontSize="sm" color="gray">
           {todo.account_name}
         </Text>
