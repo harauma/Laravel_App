@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  IconButton,
   Input,
   Spinner,
   Stack,
@@ -37,6 +38,7 @@ import { useSelectTodo } from "../../hooks/Todo/useSelectTodo";
 import { useLoginAccount } from "../../hooks/useLoginAccount";
 import { isEmpty, isNil } from "lodash";
 import { useUpdateTodo } from "../../hooks/Todo/useUpdateTodo";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const Home: VFC = memo(() => {
   const { loginAccount } = useLoginAccount();
@@ -157,19 +159,19 @@ export const Home: VFC = memo(() => {
           <Spinner />
         </Center>
       ) : (
-        <Tabs isFitted size="lg" variant="enclosed" colorScheme="green">
+        <Tabs isFitted size="lg" variant="enclosed" colorScheme="teal">
           <TabList>
             <Tab>One</Tab>
             <Tab>Two</Tab>
             <Tab>Three</Tab>
             <Tab isDisabled>
-              <PrimaryButton
+              <IconButton
                 size="sm"
-                variant="outline"
-                onClick={onClickCreateTab}
-              >
-                +
-              </PrimaryButton>
+                variant="ghost"
+                colorScheme="teal"
+                aria-label="Create Tab"
+                icon={<AddIcon />}
+              />
             </Tab>
           </TabList>
           <TabPanels>
