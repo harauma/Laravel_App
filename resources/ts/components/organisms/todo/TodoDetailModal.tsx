@@ -15,6 +15,12 @@ import {
   Text,
   Button,
   Textarea,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
 
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
@@ -37,7 +43,9 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
   const { updateTodo, loading: updateLoading } = useUpdateTodo();
   const { deleteTodo, loading: deleteLoading } = useDeleteTodo();
   const [todo, setTodo] = useState<Todo>({});
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const initialRef = useRef<HTMLInputElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setTodo(todoInfo ?? {});
@@ -65,8 +73,11 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
 
   const onClickDelete = async () => {
     await deleteTodo(todo);
+    onCloseAlert();
     onClose();
   };
+
+  const onCloseAlert = () => setIsAlertOpen(false);
 
   return (
     <Modal
@@ -124,11 +135,41 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
             bg="red.400"
             color="white"
             _hover={{ opacity: 0.8 }}
-            onClick={onClickDelete}
-            isLoading={deleteLoading}
+            onClick={() => setIsAlertOpen(true)}
           >
             削除
           </Button>
+          <AlertDialog
+            isOpen={isAlertOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onCloseAlert}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                  Todo削除
+                </AlertDialogHeader>
+
+                <AlertDialogBody>削除しますか？</AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onCloseAlert}>
+                    キャンセル
+                  </Button>
+                  <Button
+                    bg="red.400"
+                    color="white"
+                    _hover={{ opacity: 0.8 }}
+                    onClick={onClickDelete}
+                    ml={3}
+                    isLoading={deleteLoading}
+                  >
+                    削除
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </ModalFooter>
       </ModalContent>
     </Modal>
