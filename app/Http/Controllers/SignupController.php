@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,14 +35,17 @@ class SignupController extends Controller
         $password = $request->input('password');
         try {
             $account = Account::where('login_id', $loginId)->first();
-            if ($account->password !== $password) {
+            if (Hash::check($password, $account->password)) {
                 $responseData = [
-                    'login_id' => $loginId,
-                    'password' => $password,
+                    'id' => $account->id,
+                    'name' => $account->name,
                 ];
-                return response()->json($responseData, Response::HTTP_BAD_REQUEST);
+                return response()->json($responseData, Response::HTTP_OK);
             }
-            return response()->json($account, Response::HTTP_OK);
+            $responseData = [
+                'message' => 'ログインに失敗しました。',
+            ];
+            return response()->json($responseData, Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $e) {
             return response()->json($e, Response::HTTP_BAD_REQUEST);
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -74,7 +75,7 @@ class AccoutsController extends Controller
         try {
             $account = new Account();
             $account->login_id = $request->input('login_id');
-            $account->password = $request->input('password');
+            $account->password = Hash::make($request->input('password'));
             $account->name = $request->input('name');
             $account->save();
             return response()->json($account, Response::HTTP_CREATED);
@@ -109,7 +110,7 @@ class AccoutsController extends Controller
         try {
             $account = Account::find($id);
             $account->login_id = $request->input('login_id');
-            $account->password = $request->input('password');
+            $account->password = Hash::make($request->input('password'));
             $account->name = $request->input('name');
             $account->save();
             return response()->json($account, Response::HTTP_OK);
