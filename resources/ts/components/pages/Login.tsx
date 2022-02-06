@@ -42,19 +42,34 @@ export const Login: VFC = memo(() => {
   const handleClick = () => setShow(!show);
   const onClickLogin = () => login(userId, password);
   const onClickGotoSignup = useCallback(() => history.push("signup"), []);
+
   const onChangeUserId = (e: ChangeEvent<HTMLInputElement>) =>
     setUserId(e.target.value);
+
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
-  const onKeyPressId = (e: KeyboardEvent<HTMLInputElement>) => {
+
+  const onKeyPressInput = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       passwordElement.current?.focus();
+      const element = e.target as HTMLElement;
+      switch (element.id) {
+        case "userId":
+          passwordElement.current?.focus();
+          break;
+        case "password":
+          if (canLogin()) {
+            login(userId, password);
+          }
+          break;
+        default:
+          break;
+      }
     }
   };
-  const onKeyPressPass = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == "Enter") {
-      login(userId, password);
-    }
+
+  const canLogin = (): boolean => {
+    return userId !== "" && password !== "";
   };
 
   useEffect(() => {
@@ -78,7 +93,7 @@ export const Login: VFC = memo(() => {
               placeholder="ユーザID"
               value={userId}
               onChange={onChangeUserId}
-              onKeyPress={onKeyPressId}
+              onKeyPress={onKeyPressInput}
             />
           </FormControl>
           <FormControl id="password">
@@ -92,7 +107,7 @@ export const Login: VFC = memo(() => {
                 placeholder="パスワード"
                 value={password}
                 onChange={onChangePassword}
-                onKeyPress={onKeyPressPass}
+                onKeyPress={onKeyPressInput}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -102,7 +117,7 @@ export const Login: VFC = memo(() => {
             </InputGroup>
           </FormControl>
           <PrimaryButton
-            disabled={userId === "" || password === ""}
+            disabled={!canLogin()}
             isLoading={loading}
             onClick={onClickLogin}
           >
