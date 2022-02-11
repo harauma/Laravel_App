@@ -7,6 +7,7 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Todoに関する処理
@@ -83,10 +84,13 @@ class TodosController extends Controller
         if ($result->status() !== Response::HTTP_OK) {
             return $result;
         };
+        DB::beginTransaction();
         try {
             $todo->save();
+            DB::commit();
             return response()->json($todo, Response::HTTP_CREATED);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json($todo, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -114,6 +118,7 @@ class TodosController extends Controller
         $request_todo = new Todo($request->input('todo'));
         $accountId = $request_todo['account_id'];
 
+        DB::beginTransaction();
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
@@ -121,8 +126,10 @@ class TodosController extends Controller
             $todo->detail = $request_todo->detail;
             $todo->completed = $request_todo->completed;
             $todo->save();
+            DB::commit();
             return response()->json($todo, Response::HTTP_OK);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json($e, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -133,12 +140,16 @@ class TodosController extends Controller
     public function destroy($id, Request $request)
     {
         $accountId = $request->input('account_id');
+
+        DB::beginTransaction();
         try {
             $account = Account::find($accountId);
             $todo = $account->todos()->where('id', $id)->first();
             $result = $todo->delete();
+            DB::commit();
             return response()->json($result, Response::HTTP_NO_CONTENT);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json([], Response::HTTP_BAD_REQUEST);
         }
     }
