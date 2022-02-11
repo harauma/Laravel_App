@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 /**
  * ユーザー情報に関する処理
@@ -72,14 +73,17 @@ class AccoutsController extends Controller
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
+        DB::beginTransaction();
         try {
             $account = new Account();
             $account->login_id = $request->input('login_id');
             $account->password = Hash::make($request->input('password'));
             $account->name = $request->input('name');
             $account->save();
+            DB::commit();
             return response()->json($account, Response::HTTP_CREATED);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json($e, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -107,14 +111,17 @@ class AccoutsController extends Controller
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
+        DB::beginTransaction();
         try {
             $account = Account::find($id);
             $account->login_id = $request->input('login_id');
             $account->password = Hash::make($request->input('password'));
             $account->name = $request->input('name');
             $account->save();
+            DB::commit();
             return response()->json($account, Response::HTTP_OK);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json([], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -125,10 +132,13 @@ class AccoutsController extends Controller
     public function destroy($id)
     {
         // $result = Account::where('id', $id)->delete();
+        DB::beginTransaction();
         try {
             $result = Account::destroy($id);
+            DB::commit();
             return response()->json($result, Response::HTTP_NO_CONTENT);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return response()->json([], Response::HTTP_BAD_REQUEST);
         }
     }
